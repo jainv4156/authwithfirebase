@@ -28,7 +28,6 @@ function App() {
         <Routes>
           <Route path="/profile" element={<Profile user={user} />} />
           <Route path="/" element={<Authentication setUser={setUser} user={user}/>} />
-          
           <Route  path="/dashboard" element={<Dashboard user={user} setUser={setUser}/>} />
         </Routes>
       </BrowserRouter>

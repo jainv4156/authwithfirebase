@@ -1,4 +1,8 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
 import React, { useState } from "react";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
@@ -11,61 +15,55 @@ export default function Authentication(props) {
   const nevigate = useNavigate();
   const [loginSignupError, setLoginSignupError] = useState("");
 
-  const changeloginSignup = (ans,e) => {
+  const changeloginSignup = (ans, e) => {
     e.preventDefault();
-    setEmail("")
-    setPassword("")
-    setCurrentUser("")
+    setEmail("");
+    setPassword("");
+    setCurrentUser("");
     setLoginOrSginup(ans);
-    setLoginSignupError("")
-
+    setLoginSignupError("");
   };
 
   const handlenevigate = () => {
-      nevigate("/dashboard")
-  }
+    nevigate("/dashboard");
+  };
 
   const handleSignup = (e) => {
-    if(email === "" || password === "" || currentUser === ""){
-      alert("Please fill all the fields")
-    }
-    else{
-
+    if (email === "" || password === "" || currentUser === "") {
+      alert("Please fill all the fields");
+    } else {
       e.preventDefault();
       createUserWithEmailAndPassword(auth, email, password)
-      .then(async(response) => {
-        const user= response.user
-        await updateProfile(user, {
-          displayName: currentUser
+        .then(async (response) => {
+          const user = response.user;
+          await updateProfile(user, {
+            displayName: currentUser,
+          });
+          handlenevigate();
         })
-        handlenevigate()
-
-        // const user = userCredential.user
-      }).catch((error) => {
-        console.log(error.message);
-      });
+        .catch((error) => {
+          console.log(error.message);
+        });
     }
-  }
+  };
 
-  const handleLogin = async(e) => {
-    if(email === "" || password === ""){
-      alert("Please fill all the fields")
-    }
-    else{
-  
+  const handleLogin = async (e) => {
+    if (email === "" || password === "") {
+      alert("Please fill all the fields");
+    } else {
       e.preventDefault();
       await signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-      const user =  userCredential.user
-      setCurrentUser(user.displayName)
-      setLoginSignupError("")
-      handlenevigate()
-    }).catch((error) => {
-      setLoginSignupError(error.message)
-    });
-  }
-
-  }
+        .then((userCredential) => {
+          const user = userCredential.user;
+          setCurrentUser(user.displayName);
+          setLoginSignupError("");
+          handlenevigate();
+        })
+        .catch((error) => {
+          setLoginSignupError(error.message);
+        });
+    }
+  };
 
   if (loginOrSginup === "signup") {
     return (
@@ -73,41 +71,57 @@ export default function Authentication(props) {
         <h2 className="headingeventbrite">iqnaught</h2>
         <h1>SignUp</h1>
 
-        <form >
-          <label>Username</label>
-          <input
-            type="text"
-            name="username"
-            placeholder="username"
-            value={currentUser}
-            onChange={(e) => setCurrentUser(e.target.value)}
-          />
+        <form>
+          <div className="mb-3">
+            <label>Username</label>
+            <input
+              type="text"
+              name="username"
+              placeholder="username"
+              value={currentUser}
+              onChange={(e) => setCurrentUser(e.target.value)}
+              className="form-control"
+            />
+          </div>
 
-          <label>Email</label>
-          <input
-            type="text"
-            name="email"
-            placeholder="Enter you email address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          <div className="mb-3">
+            <label>Email</label>
+            <input
+              type="text"
+              name="email"
+              placeholder="Enter your email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="form-control"
+            />
+          </div>
 
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className="mb-3">
+            <label>Password</label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="form-control"
+            />
+          </div>
 
-          <button onClick={handleSignup}>Continue</button>
+          <button onClick={handleSignup} className="btn btn-primary">
+            Continue
+          </button>
         </form>
+
         <div className="">
           <p>
             Already have an account?{" "}
-            <button type="submit" onClick={e => changeloginSignup("login",e)}>
-              login
+            <button
+              type="submit"
+              onClick={(e) => changeloginSignup("login", e)}
+              className="btn btn-link"
+            >
+              Login
             </button>
           </p>
         </div>
@@ -116,42 +130,57 @@ export default function Authentication(props) {
   }
 
   return (
-    
-    <div className="LoginPage">
-      <h2 className="headingeventbrite">iqnaught</h2>
-      <h1>Login</h1>
+    <div className="container">
+      <h2 className="text-center">iqnaught</h2>
+      <div className="container">
+        <h1 className="text-center">Login</h1>
 
-      <form >
-        <label>Email</label>
-        <input
-          type="text"
-          name="email"
-          placeholder="Enter you email address"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <form>
+          <div className="mb-3">
+            <label>Email</label>
+            <input
+              type="text"
+              name="email"
+              placeholder="Enter your email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="form-control"
+            />
+          </div>
 
-        <label>Password</label> 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {<p>{loginSignupError}</p>}
+          <div className="mb-3">
+            <label>Password</label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="form-control"
+            />
+          </div>
 
-        <button type="submit" onClick={handleLogin}>Continue</button>
-      </form>
+          <div className="mb-3">
+            {<p>{loginSignupError}</p>}
+          </div>
 
-      <div className="">
-        <p>
-          Don't have an account?{" "}
-          <button type="submit" onClick={e => changeloginSignup("signup",e)}>
-            SignUp
+          <button type="submit" onClick={handleLogin} className="btn btn-primary">
+            Continue
           </button>
-        </p>
-       
+        </form>
+
+        <div className="">
+          <p>
+            Don't have an account?{" "}
+            <button
+              type="submit"
+              onClick={(e) => changeloginSignup("signup", e)}
+              className="btn btn-link"
+            >
+              SignUp
+            </button>
+          </p>
+        </div>
       </div>
     </div>
   );
